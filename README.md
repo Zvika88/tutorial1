@@ -1,4 +1,4 @@
-# ${1:Project Name}
+# Tutorial 1 - Ionic + Loopback
 
 This is a repository of code used in the Ionic + Loopback tutorial.
 
