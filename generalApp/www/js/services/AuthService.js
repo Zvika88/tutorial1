@@ -1,6 +1,4 @@
-angular.module('udemy')
-
-.service('AuthService', function($q, $http, USER_ROLES) {
+angular.module('udemy').service('AuthService', function($q, $http, USER_ROLES) {
   var LOCAL_TOKEN_KEY = 'yourTokenKey';
   var username = '';
   var isAuthenticated = false;
@@ -72,15 +70,21 @@ angular.module('udemy')
     login: login,
     logout: logout,
     isAuthorized: isAuthorized,
-    isAuthenticated: function() {return isAuthenticated;},
-    username: function() {return username;},
-    role: function() {return role;}
+    isAuthenticated: function() {
+      return isAuthenticated;
+    },
+    username: function() {
+      return username;
+    },
+    role: function() {
+      return role;
+    }
   };
 })
 
-.factory('AuthInterceptor', function ($rootScope, $q, AUTH_EVENTS) {
+.factory('AuthInterceptor', function($rootScope, $q, AUTH_EVENTS) {
   return {
-    responseError: function (response) {
+    responseError: function(response) {
       $rootScope.$broadcast({
         401: AUTH_EVENTS.notAuthenticated,
         403: AUTH_EVENTS.notAuthorized
@@ -90,6 +94,6 @@ angular.module('udemy')
   };
 })
 
-.config(function ($httpProvider) {
+.config(function($httpProvider) {
   $httpProvider.interceptors.push('AuthInterceptor');
 })

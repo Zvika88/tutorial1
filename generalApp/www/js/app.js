@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('udemy', ['ionic', 'ngCordova'])
+angular.module('udemy', ['ionic', 'ngCordova', 'StorageService'])
 
 .constant('AUTH_EVENTS', {
   notAuthenticated: 'auth-not-authenticated',
@@ -70,15 +70,12 @@ angular.module('udemy', ['ionic', 'ngCordova'])
     controller: 'UserCtrl'
   })
 
-  // setup an abstract state for the tabs directive
   .state('app', {
     url: '/app',
     abstract: true,
     templateUrl: 'templates/menu.html',
     controller: 'UserCtrl'
   })
-
-  // Each tab has its own nav history stack:
 
   .state('app.main', {
     url: '/main',
@@ -93,8 +90,18 @@ angular.module('udemy', ['ionic', 'ngCordova'])
     url: '/todo',
     views: {
       'menuContent': {
-        templateUrl: 'templates/todo.html',
-        controller: 'TutorialListCtrl'
+        templateUrl: 'templates/todo-list.html',
+        controller: 'TodoListCtrl'
+      }
+    }
+  })
+
+  .state('app.todo.single', {
+    url: '/:todoId',
+    views: {
+      'menuContent@app': {
+        templateUrl: 'templates/todo-single.html',
+        controller: 'TodoSingleCtrl'
       }
     }
   })
@@ -111,7 +118,5 @@ angular.module('udemy', ['ionic', 'ngCordova'])
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/main');
-
-
 
 });
