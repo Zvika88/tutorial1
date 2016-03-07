@@ -1,4 +1,4 @@
-angular.module('udemy').controller('TodoListCtrl', function($scope, $state, $ionicSideMenuDelegate, $ionicModal, TodoService) {
+angular.module('ioneazly').controller('TodoListCtrl', function($scope, $state, $ionicSideMenuDelegate, $ionicModal, TodoService) {
 
   $scope.showDeleteButtons = false;
   $scope.todos = [];

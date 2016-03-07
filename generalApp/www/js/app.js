@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('udemy', ['ionic', 'ngCordova', 'StorageService'])
+angular.module('ioneazly', ['ionic', 'ngCordova', 'StorageService'])
 
 .constant('AUTH_EVENTS', {
   notAuthenticated: 'auth-not-authenticated',
@@ -63,20 +63,22 @@ angular.module('udemy', ['ionic', 'ngCordova', 'StorageService'])
   // Each state's controller can be found in controllers.js
   $stateProvider
 
-  // setup an abstract state for the tabs directive
-    .state('login', {
-    url: '/login',
-    templateUrl: 'templates/login.html',
-    controller: 'UserCtrl'
-  })
-
-  .state('app', {
-    url: '/app',
+  // Setup abstract layer for the side menu
+    .state('app', {
+    url: '',
     abstract: true,
     templateUrl: 'templates/menu.html',
     controller: 'UserCtrl'
   })
 
+  // View where users can login
+  .state('login', {
+    url: '/login',
+    templateUrl: 'templates/login.html',
+    controller: 'UserCtrl'
+  })
+
+  // Main welcome screen
   .state('app.main', {
     url: '/main',
     views: {
@@ -86,6 +88,7 @@ angular.module('udemy', ['ionic', 'ngCordova', 'StorageService'])
     }
   })
 
+  // Todo list view
   .state('app.todo', {
     url: '/todo',
     views: {
@@ -96,6 +99,7 @@ angular.module('udemy', ['ionic', 'ngCordova', 'StorageService'])
     }
   })
 
+  // Todo single item view
   .state('app.todo.single', {
     url: '/:todoId',
     views: {
@@ -106,6 +110,7 @@ angular.module('udemy', ['ionic', 'ngCordova', 'StorageService'])
     }
   })
 
+  // Barcode scanner view
   .state('app.barcodescanner', {
     url: '/barcodescanner',
     views: {
@@ -116,7 +121,7 @@ angular.module('udemy', ['ionic', 'ngCordova', 'StorageService'])
     }
   });
 
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/main');
+  // If none of the above states are matched, use this as the fallback
+  $urlRouterProvider.otherwise('/main');
 
 });

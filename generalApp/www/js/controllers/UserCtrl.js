@@ -1,4 +1,4 @@
-angular.module('udemy').controller('UserCtrl', function($scope, $state, $ionicPopup, AuthService) {
+angular.module('ioneazly').controller('UserCtrl', function($scope, $state, $ionicPopup, AuthService) {
 
   $scope.doLogin = function(loginData) {
     AuthService.login(loginData.username, loginData.password).then(function(authenticated) {

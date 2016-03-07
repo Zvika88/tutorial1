@@ -1,4 +1,4 @@
-angular.module('udemy').controller('TodoSingleCtrl', function($stateParams, $scope, $ionicHistory, TodoService) {
+angular.module('ioneazly').controller('TodoSingleCtrl', function($stateParams, $scope, $ionicHistory, TodoService) {
 
   $scope.goBack = function() {
     $ionicHistory.goBack();

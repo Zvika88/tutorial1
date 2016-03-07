@@ -1,4 +1,4 @@
-angular.module('udemy').factory('TodoService', function($localStorage) {
+angular.module('ioneazly').factory('TodoService', function($localStorage) {
   // Might use a resource here that returns a JSON array
 
   // Some fake testing data

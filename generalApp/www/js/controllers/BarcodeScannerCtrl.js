@@ -1,4 +1,4 @@
-angular.module('udemy').controller('BarcodeScannerCtrl', function($scope, $ionicSideMenuDelegate, $ionicLoading, $cordovaBarcodeScanner, $cordovaDialogs) {
+angular.module('ioneazly').controller('BarcodeScannerCtrl', function($scope, $ionicSideMenuDelegate, $ionicLoading, $cordovaBarcodeScanner, $cordovaDialogs) {
 
   $scope.toggleLeft = function() {
     $ionicSideMenuDelegate.toggleLeft();
