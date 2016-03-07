@@ -1,6 +1,7 @@
 <!-- Center content -->
 <ion-view view-title="Todos">
-  <ion-nav-bar class="bar-dark">
+
+  <ion-nav-bar class="bar-dark nav-title-slide-ios7">
     <ion-nav-buttons side="left">
       <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
@@ -15,7 +16,6 @@
   </ion-nav-bar>
 
   <ion-content>
-    <ion-nav-view name="todoView"></ion-nav-view>
     <!-- our list and list items -->
     <ion-list show-delete="showDeleteButtons">
       <ion-item ng-repeat="todo in todos" href="#/todo/{{todo.id}}">
@@ -24,4 +24,5 @@
       </ion-item>
     </ion-list>
   </ion-content>
+
 </ion-view>
