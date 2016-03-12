@@ -8,10 +8,20 @@ var rename = require('gulp-rename');
 var sh = require('shelljs');
 
 var paths = {
-  sass: ['./scss/**/*.scss']
+  sass: ['./scss/**/*.scss'],
+  ts: ['./www/ts/**/*.ts']
 };
 
 gulp.task('default', ['sass']);
+
+/**** TypeScript Compilation Setup Start ****/
+var ts = require('gulp-typescript');
+gulp.task('compile', function() {
+  gulp.src(paths.ts)
+    .pipe(ts(ts.createProject('tsconfig.json')))
+    .pipe(gulp.dest('www/js/'))
+});
+/**** TypeScript Compilation Setup End ****/
 
 gulp.task('sass', function(done) {
   gulp.src('./scss/ionic.app.scss')
@@ -21,13 +31,16 @@ gulp.task('sass', function(done) {
     .pipe(minifyCss({
       keepSpecialComments: 0
     }))
-    .pipe(rename({ extname: '.min.css' }))
+    .pipe(rename({
+      extname: '.min.css'
+    }))
     .pipe(gulp.dest('./www/css/'))
     .on('end', done);
 });
 
 gulp.task('watch', function() {
   gulp.watch(paths.sass, ['sass']);
+  gulp.watch(paths.ts, ['compile']);
 });
 
 gulp.task('install', ['git-check'], function() {
