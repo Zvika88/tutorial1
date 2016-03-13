@@ -1,17 +1,26 @@
-/// <reference path="../app.ts"/>
+/// <reference path="../../../typings/main.d.ts"/>
 
-angular.module('ioneazly').controller('TodoSingleCtrl', function($stateParams, $scope, $ionicHistory, TodoService) {
+class TodoSingleCtrl {
 
-  $scope.goBack = function() {
-    $ionicHistory.goBack();
-  };
+  constructor(public $stateParams:any,
+              public $scope:any,
+              public $ionicHistory:any,
+              public TodoService:any) {
 
-  $scope.todo = TodoService.findById($stateParams.todoId);
-  if($scope.todo.dueDate) $scope.todo.dueDate = new Date($scope.todo.dueDate);
+    $scope.goBack = function () {
+      $ionicHistory.goBack();
+    };
 
-  $scope.saveTodo = function() {
-    TodoService.updateById($scope.todo.id, $scope.todo);
-    $ionicHistory.goBack();
+    $scope.todo = TodoService.findById(parseInt($stateParams.todoId));
+
+    if ($scope.todo.dueDate)
+      $scope.todo.dueDate = new Date($scope.todo.dueDate);
+
+    $scope.saveTodo = function () {
+      TodoService.updateById($scope.todo.id, $scope.todo);
+      $ionicHistory.goBack();
+    }
   }
+}
 
-});
+angular.module('ioneazly').controller('TodoSingleCtrl', TodoSingleCtrl);

@@ -1,79 +1,72 @@
 /// <reference path="../app.ts"/>
-"use strict";
-angular.module('ioneazly').service('AuthService', function ($q, $http, USER_ROLES) {
-    var LOCAL_TOKEN_KEY = 'yourTokenKey';
-    var username = '';
-    var isAuthenticated = false;
-    var role = '';
-    var authToken;
-    function loadUserCredentials() {
-        var token = window.localStorage.getItem(LOCAL_TOKEN_KEY);
-        if (token) {
-            useCredentials(token);
-        }
-    }
-    function storeUserCredentials(token) {
-        window.localStorage.setItem(LOCAL_TOKEN_KEY, token);
-        useCredentials(token);
-    }
-    function useCredentials(token) {
-        username = token.split('.')[0];
-        isAuthenticated = true;
-        authToken = token;
-        if (username == 'admin') {
-            role = USER_ROLES.admin;
-        }
-        if (username == 'user') {
-            role = USER_ROLES.public;
-        }
-        // Set the token as header for your requests!
-        $http.defaults.headers.common['X-Auth-Token'] = token;
-    }
-    function destroyUserCredentials() {
-        authToken = undefined;
-        username = '';
-        isAuthenticated = false;
-        $http.defaults.headers.common['X-Auth-Token'] = undefined;
-        window.localStorage.removeItem(LOCAL_TOKEN_KEY);
-    }
-    var login = function (name, pw) {
-        return $q(function (resolve, reject) {
-            if ((name == 'admin' && pw == '1') || (name == 'user' && pw == '1')) {
-                // Make a request and receive your auth token from your server
-                storeUserCredentials(name + '.yourServerToken');
-                resolve('Login success.');
+var AuthService = (function () {
+    AuthService.$inject = ['$q', '$http', 'USER_ROLES'];
+    function AuthService($q, $http, USER_ROLES) {
+        this.$q = $q;
+        this.$http = $http;
+        this.USER_ROLES = USER_ROLES;
+        this.LOCAL_TOKEN_KEY = 'authKey';
+        this.username = '';
+        this.isAuthenticated = false;
+        this.role = '';
+        this.loadUserCredentials = function () {
+            var token = window.localStorage.getItem(this.LOCAL_TOKEN_KEY);
+            if (token) {
+                this.useCredentials(token);
             }
-            else {
-                reject('Login Failed.');
+        };
+        this.storeUserCredentials = function (token) {
+            window.localStorage.setItem(this.LOCAL_TOKEN_KEY, token);
+            this.useCredentials(token);
+        };
+        this.useCredentials = function (token) {
+            this.username = token.split('.')[0];
+            this.isAuthenticated = true;
+            this.authToken = token;
+            if (this.username == 'admin') {
+                this.role = this.USER_ROLES.admin;
             }
-        });
-    };
-    var logout = function () {
-        destroyUserCredentials();
-    };
-    var isAuthorized = function (authorizedRoles) {
-        if (!angular.isArray(authorizedRoles)) {
-            authorizedRoles = [authorizedRoles];
-        }
-        return (isAuthenticated && authorizedRoles.indexOf(role) !== -1);
-    };
-    loadUserCredentials();
-    return {
-        login: login,
-        logout: logout,
-        isAuthorized: isAuthorized,
-        isAuthenticated: function () {
-            return isAuthenticated;
-        },
-        username: function () {
-            return username;
-        },
-        role: function () {
-            return role;
-        }
-    };
-})
-    .factory('AuthInterceptor', function ($rootScope, $q, AUTH_EVENTS) {
+            if (this.username == 'user') {
+                this.role = this.USER_ROLES.public;
+            }
+            // Set the token as header for your requests!
+            this.$http.defaults.headers.common['X-Auth-Token'] = token;
+        };
+        this.destroyUserCredentials = function () {
+            this.authToken = undefined;
+            this.username = '';
+            this.isAuthenticated = false;
+            this.$http.defaults.headers.common['X-Auth-Token'] = undefined;
+            window.localStorage.removeItem(this.LOCAL_TOKEN_KEY);
+        };
+        this.login = function (name, pw) {
+            var self = this;
+            return this.$q(function (resolve, reject) {
+                if ((name == 'admin' && pw == '1') || (name == 'user' && pw == '1')) {
+                    // Make a request and receive your auth token from your server
+                    self.storeUserCredentials(name + '.yourServerToken');
+                    resolve('Login success.');
+                }
+                else {
+                    reject('Login Failed.');
+                }
+            });
+        };
+        this.logout = function () {
+            this.destroyUserCredentials();
+        };
+        this.isAuthorized = function (authorizedRoles, role) {
+            if (!angular.isArray(authorizedRoles)) {
+                authorizedRoles = [authorizedRoles];
+            }
+            return (this.isAuthenticated && authorizedRoles.indexOf(role) !== -1);
+        };
+        this.loadUserCredentials();
+    }
+    return AuthService;
+}());
+angular.module('ioneazly').service('AuthService', AuthService)
+    .factory('AuthInterceptor', ['$rootScope', '$q', 'AUTH_EVENTS', function ($rootScope, $q, AUTH_EVENTS) {
     return {
         responseError: function (response) {
             $rootScope.$broadcast({
@@ -83,7 +76,7 @@ angular.module('ioneazly').service('AuthService', function ($q, $http, USER_ROLE
             return $q.reject(response);
         }
     };
-})
-    .config(function ($httpProvider) {
+}])
+    .config(['$httpProvider', function ($httpProvider) {
     $httpProvider.interceptors.push('AuthInterceptor');
-});
+}]);

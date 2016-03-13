@@ -1,20 +1,11 @@
 /// <reference path="../../typings/main.d.ts"/>
 
-// Ionic Starter App
-
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-// 'starter.services' is found in services.js
-// 'starter.controllers' is found in controllers.js
-
 angular.module('ioneazly', ['ionic', 'ngCordova', 'StorageService'])
 
 .constant('AUTH_EVENTS', {
   notAuthenticated: 'auth-not-authenticated',
   notAuthorized: 'auth-not-authorized'
 })
-
 .constant('USER_ROLES', {
   admin: 'admin_role',
   public: 'public_role'
@@ -44,7 +35,8 @@ angular.module('ioneazly', ['ionic', 'ngCordova', 'StorageService'])
       }
     }
 
-    if (!AuthService.isAuthenticated()) {
+    // If not authenticated send user to login view
+    if (!AuthService.isAuthenticated) {
       if (next.name !== 'login') {
         event.preventDefault();
         $state.go('login');
@@ -87,7 +79,7 @@ angular.module('ioneazly', ['ionic', 'ngCordova', 'StorageService'])
     }
   })
 
-  // Todo list view
+  // List view of all todos
   .state('app.todo', {
     url: '/todo',
     views: {
@@ -98,7 +90,7 @@ angular.module('ioneazly', ['ionic', 'ngCordova', 'StorageService'])
     }
   })
 
-  // Todo single item view
+  // Single view for the todo
   .state('app.todo.single', {
     url: '/:todoId',
     views: {
@@ -115,10 +107,11 @@ angular.module('ioneazly', ['ionic', 'ngCordova', 'StorageService'])
     views: {
       'menuContent': {
         templateUrl: 'templates/barcodeScanner.html',
-        controller: 'BarcodeScannerCtrl'
+        controller: 'BarcodeScannerCtrl as ctrl'
       }
     }
   });
+
 
   // If none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/main');

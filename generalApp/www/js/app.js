@@ -1,11 +1,4 @@
 /// <reference path="../../typings/main.d.ts"/>
-"use strict";
-// Ionic Starter App
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-// 'starter.services' is found in services.js
-// 'starter.controllers' is found in controllers.js
 angular.module('ioneazly', ['ionic', 'ngCordova', 'StorageService'])
     .constant('AUTH_EVENTS', {
     notAuthenticated: 'auth-not-authenticated',
@@ -15,7 +8,7 @@ angular.module('ioneazly', ['ionic', 'ngCordova', 'StorageService'])
     admin: 'admin_role',
     public: 'public_role'
 })
-    .run(function ($ionicPlatform, $rootScope, $state, AuthService, AUTH_EVENTS) {
+    .run(['$ionicPlatform', '$rootScope', '$state', 'AuthService', 'AUTH_EVENTS', function ($ionicPlatform, $rootScope, $state, AuthService, AUTH_EVENTS) {
     $ionicPlatform.ready(function () {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
@@ -35,15 +28,16 @@ angular.module('ioneazly', ['ionic', 'ngCordova', 'StorageService'])
                 $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
             }
         }
-        if (!AuthService.isAuthenticated()) {
+        // If not authenticated send user to login view
+        if (!AuthService.isAuthenticated) {
             if (next.name !== 'login') {
                 event.preventDefault();
                 $state.go('login');
             }
         }
     });
-})
-    .config(function ($stateProvider, $urlRouterProvider) {
+}])
+    .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     // Ionic uses AngularUI Router which uses the concept of states
     // Learn more here: https://github.com/angular-ui/ui-router
     // Set up the various states which the app can be in.
@@ -91,10 +85,10 @@ angular.module('ioneazly', ['ionic', 'ngCordova', 'StorageService'])
         views: {
             'menuContent': {
                 templateUrl: 'templates/barcodeScanner.html',
-                controller: 'BarcodeScannerCtrl'
+                controller: 'BarcodeScannerCtrl as ctrl'
             }
         }
     });
     // If none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/main');
-});
+}]);

@@ -4,9 +4,9 @@
     "allowNonTsExtensions": true,
     "module": "commonjs",
     "sourceMap": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "noEmitOnError": false,
-    "rootDir": ".",
+    "rootDir": "www/ts",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },

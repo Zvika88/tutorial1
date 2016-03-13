@@ -12,18 +12,48 @@ var paths = {
   ts: ['./www/ts/**/*.ts']
 };
 
+// Get copyright using NodeJs file system
+var getCopyright = function () {
+  return fs.readFileSync('Copyright');
+};
+
 gulp.task('default', ['sass']);
 
 /**** TypeScript Compilation Setup Start ****/
 var ts = require('gulp-typescript');
-gulp.task('compile', function() {
+gulp.task('compile', function () {
   gulp.src(paths.ts)
     .pipe(ts(ts.createProject('tsconfig.json')))
+    .pipe(ngAnnotate({
+      remove: true,
+      add: true,
+      single_quotes: true
+    }))
     .pipe(gulp.dest('www/js/'))
 });
 /**** TypeScript Compilation Setup End ****/
 
-gulp.task('sass', function(done) {
+/**** TypeScript Production Setup Start ****/
+var fs = require('fs');
+var header = require("gulp-header");
+var uglify = require("gulp-uglify");
+var ngAnnotate = require("gulp-ng-annotate");
+gulp.task('compile-production', function () {
+  gulp.src(paths.ts)
+    .pipe(ts(ts.createProject('tsconfig.json')))
+    .pipe(concat('app.min.js'))
+    .pipe(ngAnnotate({
+      remove: true,
+      add: true,
+      single_quotes: true
+    }))
+    .pipe(uglify())
+    .pipe(header(getCopyright()))
+    .pipe(gulp.dest('www/js/'))
+});
+/**** TypeScript Production Setup End ****/
+
+gulp.task('sass', function (done) {
   gulp.src('./scss/ionic.app.scss')
     .pipe(sass())
     .on('error', sass.logError)
@@ -38,19 +68,19 @@ gulp.task('sass', function(done) {
     .on('end', done);
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', function () {
   gulp.watch(paths.sass, ['sass']);
   gulp.watch(paths.ts, ['compile']);
 });
 
-gulp.task('install', ['git-check'], function() {
+gulp.task('install', ['git-check'], function () {
   return bower.commands.install()
-    .on('log', function(data) {
+    .on('log', function (data) {
       gutil.log('bower', gutil.colors.cyan(data.id), data.message);
     });
 });
 
-gulp.task('git-check', function(done) {
+gulp.task('git-check', function (done) {
   if (!sh.which('git')) {
     console.log(
       '  ' + gutil.colors.red('Git is not installed.'),

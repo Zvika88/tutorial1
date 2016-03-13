@@ -8,7 +8,7 @@
       <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
-      <button class="button" ng-click="scanCode()">
+      <button class="button" ng-click="ctrl.scanCode()">
         <i class="icon ion-qr-scanner"></i>
         Scan Now
       </button>
@@ -17,7 +17,7 @@
   <ion-content>
     <div class="card">
       <div class="item item-divider">Scan Results</div>
-      <div class="item item-text-wrap">{{scannedCode}}
+      <div class="item item-text-wrap">{{ctrl.scannedCode}}
       </div>
     </div>
   </ion-content>

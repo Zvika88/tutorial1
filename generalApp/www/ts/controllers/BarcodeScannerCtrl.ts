@@ -1,38 +1,51 @@
-/// <reference path="../app.ts"/>
+/// <reference path="../../../typings/main.d.ts"/>
 
-angular.module('ioneazly').controller('BarcodeScannerCtrl', function($scope, $ionicSideMenuDelegate, $ionicLoading, $cordovaBarcodeScanner, $cordovaDialogs) {
+class BarcodeScannerCtrl {
 
-  $scope.toggleLeft = function() {
-    $ionicSideMenuDelegate.toggleLeft();
-  };
+  public scannedCode = "";
+  private currentlyScanning = false;
+
+  constructor(public $ionicSideMenuDelegate:any,
+              public $ionicLoading:any,
+              public $cordovaBarcodeScanner:any,
+              public $cordovaDialogs:any) {
+  }
+
+  // Toggle left menu sidebar
+  public toggleLeft = function () {
+    this.$ionicSideMenuDelegate.toggleLeft();
+  }
 
   // Close the new tutorial modal
-  $scope.scanCode = function() {
-    $ionicLoading.show({
+  public scanCode = function () {
+
+    this.$ionicLoading.show({
       template: '<ion-spinner></ion-spinner>'
     });
-    console.log("scanCode run");
-    if ($scope.currentlyScanning === true) {
-      $ionicLoading.hide();
+
+    if (this.currentlyScanning === true) {
+      this.$ionicLoading.hide();
       return;
     } else if (ionic.Platform.platforms.indexOf("browser") !== -1) {
-      $ionicLoading.hide();
-      $scope.scannedCode = "QR Code scanner not available in development browser.";
+      this.$ionicLoading.hide();
+      this.scannedCode = "QR Code scanner not available in development browser.";
       return;
     } else {
-      $scope.currentlyScanning = true;
+      this.currentlyScanning = true;
     }
-    $cordovaBarcodeScanner
-      .scan()
-      .then(function(barcodeData) {
-        $ionicLoading.hide();
-        $scope.currentlyScanning = false;
-        $scope.scannedCode = barcodeData.text;
-      }, function(error) {
-        $ionicLoading.hide();
-        $scope.currentlyScanning = false;
-        $cordovaDialogs.alert(error, 'barcode Error', 'OK');
-      });
-  };
 
-});
+    this.$cordovaBarcodeScanner
+      .scan()
+      .then(function (barcodeData) {
+        this.$ionicLoading.hide();
+        this.currentlyScanning = false;
+        this.scannedCode = barcodeData.text;
+      }, function (error) {
+        this.$ionicLoading.hide();
+        this.currentlyScanning = false;
+        this.$cordovaDialogs.alert(error, 'barcode Error', 'OK');
+      });
+  }
+}
+
+angular.module('ioneazly').controller("BarcodeScannerCtrl", BarcodeScannerCtrl);

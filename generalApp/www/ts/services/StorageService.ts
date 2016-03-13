@@ -1,20 +1,26 @@
 /// <reference path="../app.ts"/>
 
-angular.module('StorageService', [])
 
-.factory('$localStorage', ['$window', function($window) {
-  return {
-    set: function(key, value) {
-      $window.localStorage[key] = value;
-    },
-    get: function(key, defaultValue) {
-      return $window.localStorage[key] || defaultValue;
-    },
-    setObject: function(key, value) {
-      $window.localStorage[key] = JSON.stringify(value);
-    },
-    getObject: function(key) {
-      return JSON.parse($window.localStorage[key] || '{}');
-    }
+class LocalStorage {
+
+  constructor() {}
+
+  public set = function (key, value) {
+    window.localStorage[key] = value;
   }
-}]);
+
+  public get = function (key, defaultValue) {
+    return window.localStorage[key] || defaultValue;
+  }
+
+  public setObject = function (key, value) {
+    window.localStorage[key] = JSON.stringify(value);
+  }
+
+  public getObject = function (key) {
+    return JSON.parse(window.localStorage[key] || '{}');
+  }
+
+}
+
+angular.module('StorageService', []).service('$localStorage', LocalStorage);

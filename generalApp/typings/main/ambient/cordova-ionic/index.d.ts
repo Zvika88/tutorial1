@@ -7,5 +7,5 @@
 
 
 interface CordovaPlugins {
-  Keyboard:Ionic.Keyboard;
+  Keyboard:any;
 }
